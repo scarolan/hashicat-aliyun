@@ -14,3 +14,7 @@ variable "width" {
 variable "placeholder" {
   default = "placekitten.com"
 }
+
+variable "az" {
+  default = "cn-hongkong-b"
+}

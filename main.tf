@@ -1,16 +1,15 @@
 # hashicat-aliyun
 
-# Create a new ECS instance for VPC
 resource "alicloud_vpc" "hashicat-vpc" {
   name       = "${var.prefix}-vpc"
-  cidr_block = "172.16.0.0/12"
+  cidr_block = "10.0.0.0/16"
 }
 
 resource "alicloud_vswitch" "hashicat-vswitch" {
   name              = "${var.prefix}-vswitch"
   vpc_id            = alicloud_vpc.hashicat-vpc.id
-  cidr_block        = "172.16.0.0/21"
-  availability_zone = "cn-hangzhou-b"
+  cidr_block        = "10.0.10.0/24"
+  availability_zone = var.az
 }
 
 resource "alicloud_security_group" "hashicat-sg" {
@@ -32,7 +31,6 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
 
 resource "alicloud_instance" "hashicat-instance" {
   description                = "${var.prefix} HashiCat Application"
-  availability_zone          = "cn-hangzhou-b"
   security_groups            = alicloud_security_group.hashicat-sg.*.id
   instance_type              = "ecs.n1.tiny"
   system_disk_category       = "cloud_efficiency"
